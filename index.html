@@ -7,188 +7,210 @@
     <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
     <style>
         :root {
-            --cake-color: #f3e5f5;
-            --frosting-color: #ff80ab;
-            --plate-color: #e0e0e0;
+            --cake-color: #ff4d6d;
+            --frosting-color: #ff85a1;
+            --text-color: #ffffff;
         }
 
         body {
-            background-color: #fff5f8;
+            background-color: #fff0f3;
             display: flex;
             flex-direction: column;
             align-items: center;
             justify-content: center;
             height: 100vh;
             margin: 0;
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            font-family: 'Poppins', sans-serif;
             overflow: hidden;
         }
 
         h1 {
-            color: #d81b60;
-            margin-bottom: 50px;
+            color: #c9184a;
             font-weight: 300;
-            letter-spacing: 2px;
+            margin-bottom: 20px;
         }
 
-        .container {
+        .scene {
             position: relative;
+            width: 300px;
+            height: 300px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
             cursor: pointer;
         }
 
-        /* Cake Styling */
-        .cake {
+        /* Heart Cake Construction */
+        .heart-cake {
             position: relative;
-            width: 250px;
-            height: 150px;
-            background: var(--cake-color);
-            border-radius: 10px 10px 0 0;
-            box-shadow: 0 10px 20px rgba(0,0,0,0.1);
+            width: 200px;
+            height: 200px;
+            background-color: var(--cake-color);
+            transform: rotate(-45deg);
+            transition: all 0.8s ease;
+            box-shadow: -10px 10px 30px rgba(0,0,0,0.1);
         }
 
-        .frosting {
+        .heart-cake::before,
+        .heart-cake::after {
+            content: "";
             position: absolute;
-            top: 0;
-            width: 100%;
-            height: 40px;
-            background: var(--frosting-color);
-            border-radius: 10px 10px 0 0;
-            z-index: 2;
+            width: 200px;
+            height: 200px;
+            background-color: var(--cake-color);
+            border-radius: 50%;
         }
 
-        .plate {
-            width: 300px;
-            height: 20px;
-            background: var(--plate-color);
-            border-radius: 20px;
-            margin-top: -5px;
+        .heart-cake::before { top: -100px; left: 0; }
+        .heart-cake::after { left: 100px; top: 0; }
+
+        /* Text on Cake */
+        .cake-text {
+            position: absolute;
+            transform: rotate(45deg);
+            width: 150px;
+            text-align: center;
+            color: var(--text-color);
+            font-size: 1.2rem;
+            font-weight: bold;
+            z-index: 10;
+            top: 40px;
+            left: 40px;
+            pointer-events: none;
+            line-height: 1.2;
+            text-shadow: 1px 1px 2px rgba(0,0,0,0.2);
         }
 
-        /* Candle Styling */
+        /* Candle */
         .candle {
             position: absolute;
-            bottom: 100%;
+            top: -20px;
             left: 50%;
-            transform: translateX(-50%);
-            width: 12px;
-            height: 50px;
-            background: linear-gradient(to bottom, #ffeb3b, #fbc02d);
-            border-radius: 3px;
+            width: 10px;
+            height: 40px;
+            background: linear-gradient(to bottom, #ffd6a5, #ffadad);
+            z-index: 15;
+            transform: rotate(45deg); /* Correcting for heart rotation */
         }
 
         .flame {
             position: absolute;
-            bottom: 110%;
-            left: 50%;
-            transform: translateX(-50%);
-            width: 15px;
-            height: 25px;
-            background: #ff9800;
+            top: -20px;
+            left: -2px;
+            width: 14px;
+            height: 20px;
+            background: #ff9e00;
             border-radius: 50% 50% 20% 20%;
-            box-shadow: 0 0 20px #ffeb3b;
-            animation: flicker 0.1s infinite alternate;
+            box-shadow: 0 0 15px #ff9e00;
             display: none;
+            animation: flicker 0.1s infinite alternate;
         }
 
         @keyframes flicker {
-            0% { transform: translateX(-50%) scale(1); }
-            100% { transform: translateX(-52%) scale(1.1); }
+            from { transform: scale(1); }
+            to { transform: scale(1.1); }
         }
 
-        /* Interactive Elements */
-        .instruction {
-            margin-top: 30px;
-            color: #880e4f;
-            font-size: 1.1rem;
-            transition: opacity 0.5s;
-        }
-
-        .slice-line {
+        /* The Slice Effect */
+        .slice {
             position: absolute;
-            top: 0;
-            left: 50%;
-            width: 4px;
-            height: 100%;
-            background: white;
-            transform: scaleY(0);
-            transition: transform 0.8s ease-in-out;
-            z-index: 3;
+            width: 80px;
+            height: 80px;
+            background: #fff0f3; /* Matches background to look "cut" */
+            top: -10px;
+            right: -10px;
+            transform: rotate(0deg);
+            z-index: 12;
+            display: none;
+            clip-path: polygon(100% 0, 0 0, 100% 100%);
         }
 
-        .cut-active .slice-line {
-            transform: scaleY(1);
+        .cut-active .heart-cake {
+            transform: rotate(-45deg) translate(-20px, 20px);
         }
 
-        .cut-active .cake {
-            animation: split 1s forwards;
+        .instruction {
+            margin-top: 40px;
+            color: #ff4d6d;
+            font-weight: 500;
         }
 
-        @keyframes split {
-            to { filter: brightness(1.05); }
+        .plate {
+            position: absolute;
+            bottom: 20px;
+            width: 320px;
+            height: 10px;
+            background: #e9ecef;
+            border-radius: 50%;
+            z-index: -1;
         }
     </style>
 </head>
 <body>
 
-    <h1 id="title">Happy Anniversary!</h1>
+    <h1 id="mainTitle">Our Special Day</h1>
 
-    <div class="container" id="cakeContainer" onclick="handleInteraction()">
-        <div class="candle">
-            <div class="flame" id="flame"></div>
-        </div>
-        <div class="cake" id="cakeBody">
-            <div class="frosting"></div>
-            <div class="slice-line"></div>
+    <div class="scene" onclick="handleStep()">
+        <div class="heart-cake" id="cake">
+            <div class="cake-text">Happy<br>6 Months</div>
+            <div class="candle" id="candle">
+                <div class="flame" id="flame"></div>
+            </div>
+            <div class="slice" id="slice"></div>
         </div>
         <div class="plate"></div>
     </div>
 
-    <p class="instruction" id="statusText">Click to light the candle 🕯️</p>
+    <p class="instruction" id="status">Tap to light the candle 🕯️</p>
 
     <script>
-        let stage = 0;
+        let step = 0;
 
-        function handleInteraction() {
+        function handleStep() {
             const flame = document.getElementById('flame');
-            const status = document.getElementById('statusText');
-            const container = document.getElementById('cakeContainer');
+            const status = document.getElementById('status');
+            const cake = document.getElementById('cake');
+            const slice = document.getElementById('slice');
+            const title = document.getElementById('mainTitle');
 
-            if (stage === 0) {
-                // Light the candle
+            if (step === 0) {
+                // Step 1: Light Candle
                 flame.style.display = 'block';
-                status.innerText = "Now, click to cut the cake together 🎂";
-                stage = 1;
-            } else if (stage === 1) {
-                // Cut the cake
-                container.classList.add('cut-active');
+                status.innerText = "Make a wish and tap to cut! 🎂";
+                step = 1;
+            } else if (step === 1) {
+                // Step 2: Cut Cake
+                slice.style.display = 'block';
+                cake.parentElement.classList.add('cut-active');
                 flame.style.display = 'none';
-                status.innerText = "Another month down, forever to go! ❤️";
-                
-                // Trigger Confetti
-                var duration = 3 * 1000;
-                var end = Date.now() + duration;
+                status.innerText = "Happy 6 Months, Shreya! ❤️";
+                title.innerText = "Celebration Time!";
+
+                // Heart-themed Confetti
+                const end = Date.now() + 3000;
+                const colors = ['#ff4d6d', '#ff758f', '#ffffff'];
 
                 (function frame() {
                     confetti({
-                        particleCount: 3,
+                        particleCount: 2,
                         angle: 60,
                         spread: 55,
                         origin: { x: 0 },
-                        colors: ['#ff80ab', '#d81b60', '#f3e5f5']
+                        colors: colors
                     });
                     confetti({
-                        particleCount: 3,
+                        particleCount: 2,
                         angle: 120,
                         spread: 55,
                         origin: { x: 1 },
-                        colors: ['#ff80ab', '#d81b60', '#f3e5f5']
+                        colors: colors
                     });
 
                     if (Date.now() < end) {
                         requestAnimationFrame(frame);
                     }
                 }());
-                stage = 2;
+                step = 2;
             }
         }
     </script>
