@@ -4,6 +4,8 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Happy 6 Months!</title>
+    <!-- Importing a elegant handwritten font -->
+    <link href="https://fonts.googleapis.com/css2?family=Dancing+Script:wght@700&display=swap" rel="stylesheet">
     <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
     <style>
         body {
@@ -19,30 +21,33 @@
             text-align: center;
         }
 
-        h1 { color: #c9184a; margin-bottom: 5px; font-size: 1.8rem; }
+        h1 { color: #c9184a; margin-bottom: 5px; font-size: 2rem; }
         p { color: #ff4d6d; font-weight: bold; margin-bottom: 20px; }
 
         .cake-wrapper {
             position: relative;
-            width: 320px;
-            height: 320px;
+            width: 350px;
+            height: 350px;
             cursor: pointer;
+            display: flex;
+            justify-content: center;
+            align-items: center;
         }
 
-        /* The slice piece - locked into the SVG grid */
+        /* The slice piece animation */
         #cake-slice {
-            transition: transform 0.6s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            transition: transform 0.7s cubic-bezier(0.175, 0.885, 0.32, 1.275);
             transform-origin: 50px 50px;
         }
 
         .is-cut #cake-slice {
-            transform: translate(15px, -10px) rotate(10deg);
+            transform: translate(18px, -12px) rotate(8deg);
         }
 
-        /* Candle placement */
+        /* Candle styling */
         .candle-box {
             position: absolute;
-            top: 20px;
+            top: 25px;
             left: 50%;
             transform: translateX(-50%);
             z-index: 10;
@@ -50,7 +55,7 @@
 
         .candle-stick {
             width: 10px;
-            height: 40px;
+            height: 45px;
             background: #ffd6a5;
             border-radius: 3px;
         }
@@ -69,6 +74,13 @@
         }
 
         @keyframes flicker { from { transform: scale(1); } to { transform: scale(1.1); } }
+
+        /* Gold Gradient for the Font */
+        .gold-text {
+            font-family: 'Dancing Script', cursive;
+            fill: url(#goldGradient);
+            filter: drop-shadow(1px 1px 1px rgba(0,0,0,0.2));
+        }
     </style>
 </head>
 <body>
@@ -83,19 +95,28 @@
             <div class="candle-stick"></div>
         </div>
 
-        <!-- The Cake (Single SVG ensures nothing moves out of place) -->
-        <svg viewBox="0 0 100 100" width="300" height="300">
-            <!-- Main Cake Body (Circle with a slice missing) -->
-            <path d="M 50,50 L 85,30 A 40,40 0 1 1 50,10 Z" fill="#ff85a1" stroke="white" stroke-width="2" />
+        <!-- SVG Cake -->
+        <svg viewBox="0 0 100 100" width="320" height="320">
+            <defs>
+                <!-- Golden Gradient Definition -->
+                <linearGradient id="goldGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+                    <stop offset="0%" style="stop-color:#d4af37;stop-opacity:1" />
+                    <stop offset="50%" style="stop-color:#f9e272;stop-opacity:1" />
+                    <stop offset="100%" style="stop-color:#b8860b;stop-opacity:1" />
+                </linearGradient>
+            </defs>
+
+            <!-- Main Cake Body (No border) -->
+            <path d="M 50,50 L 85,30 A 40,40 0 1 1 50,10 Z" fill="#ff85a1" />
             
-            <!-- The Slice Piece (Perfectly fits the gap above) -->
+            <!-- The Slice (No border) -->
             <g id="cake-slice">
-                <path d="M 50,50 L 50,10 A 40,40 0 0 1 85,30 Z" fill="#ff85a1" stroke="white" stroke-width="2" />
+                <path d="M 50,50 L 50,10 A 40,40 0 0 1 85,30 Z" fill="#ff85a1" />
             </g>
 
-            <!-- Text locked to the center -->
-            <text x="50" y="55" fill="white" font-size="6" font-weight="bold" text-anchor="middle" pointer-events="none">Happy</text>
-            <text x="50" y="63" fill="white" font-size="6" font-weight="bold" text-anchor="middle" pointer-events="none">6 Months</text>
+            <!-- Centered Golden Handwritten Text -->
+            <text x="50" y="55" class="gold-text" font-size="10" text-anchor="middle" pointer-events="none">Happy</text>
+            <text x="50" y="66" class="gold-text" font-size="10" text-anchor="middle" pointer-events="none">6 Months</text>
         </svg>
     </div>
 
@@ -123,7 +144,7 @@
                     particleCount: 150,
                     spread: 70,
                     origin: { y: 0.6 },
-                    colors: ['#ff85a1', '#ffffff', '#c9184a']
+                    colors: ['#ff85a1', '#ffffff', '#ffd700']
                 });
                 state = 2;
             }
