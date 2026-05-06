@@ -6,14 +6,8 @@
     <title>Happy 6 Months!</title>
     <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
     <style>
-        :root {
-            --cake-pink: #ff85a1;
-            --frosting-white: #ffffff;
-            --plate-gray: #f0f0f0;
-        }
-
         body {
-            background-color: #fff5f7;
+            background-color: #fff0f3;
             margin: 0;
             display: flex;
             flex-direction: column;
@@ -22,158 +16,116 @@
             height: 100vh;
             font-family: 'Arial', sans-serif;
             overflow: hidden;
-        }
-
-        h1 { color: #d81b60; margin-bottom: 5px; }
-        #instruction { color: #ff4d6d; font-weight: bold; margin-bottom: 30px; height: 20px; }
-
-        /* Cake Base */
-        .cake-container {
-            position: relative;
-            width: 300px;
-            height: 300px;
-            cursor: pointer;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-        }
-
-        .cake-body {
-            position: relative;
-            width: 250px;
-            height: 250px;
-            background-color: var(--cake-pink);
-            border-radius: 50%;
-            border: 8px solid var(--frosting-white); /* Piped frosting edge */
-            box-shadow: 0 10px 25px rgba(0,0,0,0.1);
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            transition: transform 0.5s ease;
-        }
-
-        .cake-text {
-            color: white;
-            font-size: 1.5rem;
-            font-weight: bold;
             text-align: center;
-            z-index: 5;
-            pointer-events: none;
-            text-shadow: 1px 1px 4px rgba(0,0,0,0.2);
         }
 
-        /* The Slice */
-        .slice {
+        h1 { color: #c9184a; margin-bottom: 5px; font-size: 1.8rem; }
+        p { color: #ff4d6d; font-weight: bold; margin-bottom: 20px; }
+
+        .cake-wrapper {
+            position: relative;
+            width: 320px;
+            height: 320px;
+            cursor: pointer;
+        }
+
+        /* The slice piece - locked into the SVG grid */
+        #cake-slice {
+            transition: transform 0.6s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            transform-origin: 50px 50px;
+        }
+
+        .is-cut #cake-slice {
+            transform: translate(15px, -10px) rotate(10deg);
+        }
+
+        /* Candle placement */
+        .candle-box {
             position: absolute;
-            width: 125px;
-            height: 125px;
-            background-color: var(--cake-pink);
-            border: 4px solid var(--frosting-white);
-            top: 50%;
+            top: 20px;
             left: 50%;
-            clip-path: polygon(0 0, 100% 0, 100% 100%);
-            transform-origin: top left;
-            transition: all 0.8s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-            display: none; /* Only show on cut */
-            z-index: 6;
-        }
-
-        .is-cut .slice {
-            display: block;
-            transform: translate(40px, -40px) rotate(15deg);
-        }
-
-        /* Visual gap in main cake */
-        .cake-gap {
-            position: absolute;
-            width: 130px;
-            height: 130px;
-            background-color: #fff5f7; /* Matches background */
-            top: 50%;
-            left: 50%;
-            clip-path: polygon(0 0, 100% 0, 100% 100%);
-            transform-origin: top left;
-            z-index: 2;
-            display: none;
-        }
-
-        .is-cut .cake-gap { display: block; }
-
-        /* Candle Logic */
-        .candle {
-            position: absolute;
-            top: 40px;
-            width: 12px;
-            height: 50px;
-            background: linear-gradient(#ffd6a5, #ffadad);
-            border-radius: 4px;
+            transform: translateX(-50%);
             z-index: 10;
+        }
+
+        .candle-stick {
+            width: 10px;
+            height: 40px;
+            background: #ffd6a5;
+            border-radius: 3px;
         }
 
         .flame {
             position: absolute;
-            top: -20px;
+            top: -18px;
             left: -2px;
-            width: 16px;
-            height: 24px;
+            width: 14px;
+            height: 20px;
             background: #ffa500;
             border-radius: 50% 50% 20% 20%;
             box-shadow: 0 0 15px #ffa500;
-            animation: flicker 0.1s infinite alternate;
             display: none;
+            animation: flicker 0.1s infinite alternate;
         }
 
         @keyframes flicker { from { transform: scale(1); } to { transform: scale(1.1); } }
-
     </style>
 </head>
 <body>
 
-    <h1 id="title">Our 6th of the Month!</h1>
-    <p id="instruction">Tap to light the candle 🕯️</p>
+    <h1 id="title">Our Special Day</h1>
+    <p id="msg">Tap to light the candle 🕯️</p>
 
-    <div class="cake-container" onclick="handleStep()">
-        <div class="candle" id="candle">
+    <div class="cake-wrapper" onclick="celebrate()">
+        <!-- Candle -->
+        <div class="candle-box" id="candle">
             <div class="flame" id="flame"></div>
+            <div class="candle-stick"></div>
         </div>
 
-        <div class="cake-body" id="cake">
-            <div class="cake-text">Happy<br>6 Months</div>
-            <div class="cake-gap"></div>
-            <div class="slice"></div>
-        </div>
+        <!-- The Cake (Single SVG ensures nothing moves out of place) -->
+        <svg viewBox="0 0 100 100" width="300" height="300">
+            <!-- Main Cake Body (Circle with a slice missing) -->
+            <path d="M 50,50 L 85,30 A 40,40 0 1 1 50,10 Z" fill="#ff85a1" stroke="white" stroke-width="2" />
+            
+            <!-- The Slice Piece (Perfectly fits the gap above) -->
+            <g id="cake-slice">
+                <path d="M 50,50 L 50,10 A 40,40 0 0 1 85,30 Z" fill="#ff85a1" stroke="white" stroke-width="2" />
+            </g>
+
+            <!-- Text locked to the center -->
+            <text x="50" y="55" fill="white" font-size="6" font-weight="bold" text-anchor="middle" pointer-events="none">Happy</text>
+            <text x="50" y="63" fill="white" font-size="6" font-weight="bold" text-anchor="middle" pointer-events="none">6 Months</text>
+        </svg>
     </div>
 
     <script>
-        let step = 0;
+        let state = 0;
 
-        function handleStep() {
+        function celebrate() {
             const flame = document.getElementById('flame');
-            const candle = document.getElementById('candle');
-            const cakeContainer = document.querySelector('.cake-container');
-            const instr = document.getElementById('instruction');
+            const wrapper = document.querySelector('.cake-wrapper');
+            const msg = document.getElementById('msg');
             const title = document.getElementById('title');
+            const candle = document.getElementById('candle');
 
-            if (step === 0) {
-                // Step 1: Light Candle
+            if (state === 0) {
                 flame.style.display = 'block';
-                instr.innerText = "Make a wish and tap to cut! 🎂";
-                step = 1;
-            } else if (step === 1) {
-                // Step 2: Cut Slice
-                cakeContainer.classList.add('is-cut');
+                msg.innerText = "Now, click to cut our cake! 🎂";
+                state = 1;
+            } else if (state === 1) {
+                wrapper.classList.add('is-cut');
                 candle.style.display = 'none';
                 title.innerText = "Happy 6 Months, Shreya! ❤️";
-                instr.innerText = "Another month down, forever to go!";
+                msg.innerText = "Another month down, forever to go!";
                 
-                // Celebration Confetti
                 confetti({
                     particleCount: 150,
                     spread: 70,
                     origin: { y: 0.6 },
-                    colors: ['#ff85a1', '#ffffff', '#d81b60']
+                    colors: ['#ff85a1', '#ffffff', '#c9184a']
                 });
-                step = 2;
+                state = 2;
             }
         }
     </script>
