@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Our Monthly Cake</title>
+    <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.5.1/dist/confetti.browser.min.js"></script>
+    <style>
+        :root {
+            --bg-color: #1a1a2e; /* Keeping the dark theme you liked */
+            --cake-color: #ff85a1;
+            --frosting: #fff;
+        }
+
+        body {
+            background-color: var(--bg-color);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            height: 100vh;
+            margin: 0;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            color: white;
+            overflow: hidden;
+        }
+
+        #cake-container {
+            position: relative;
+            width: 200px;
+            height: 200px;
+            cursor: pointer;
+            transition: transform 0.3s ease;
+        }
+
+        #cake-container:active {
+            transform: scale(0.95);
+        }
+
+        /* Simple CSS Cake */
+        .cake-half {
+            position: absolute;
+            width: 100px;
+            height: 150px;
+            background: var(--cake-color);
+            border-radius: 10px;
+            transition: all 0.8s cubic-bezier(0.68, -0.55, 0.27, 1.55);
+            border-top: 20px solid var(--frosting);
+        }
+
+        .left { left: 0; }
+        .right { left: 100px; }
+
+        .cut .left { transform: translateX(-60px) rotate(-15deg); opacity: 0.7; }
+        .cut .right { transform: translateX(60px) rotate(15deg); opacity: 0.7; }
+
+        #message {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%) scale(0);
+            text-align: center;
+            width: 80%;
+            transition: all 0.5s ease 0.4s;
+            z-index: -1;
+        }
+
+        .cut + #message {
+            transform: translate(-50%, -50%) scale(1);
+            z-index: 10;
+        }
+
+        h2 { color: #ff85a1; margin-bottom: 10px; }
+        p { font-size: 1.1rem; line-height: 1.4; }
+    </style>
+</head>
+<body>
+
+    <div id="status-text"></div>
+    
+    <div id="cake-container" onclick="cutCake()">
+        <div class="cake-half left"></div>
+        <div class="cake-half right"></div>
+    </div>
+
+    <div id="message">
+        <h2>Happy 6 Months!</h2>
+        <p id="wish-text"></p>
+    </div>
+
+    <script>
+        const today = new Date();
+        const date = today.getDate();
+        const statusText = document.getElementById('status-text');
+        const wishText = document.getElementById('wish-text');
+
+        // Set the message
+        wishText.innerText = "I love you more than my bed (which is a lot). Happy half-anniversary, Shreya! Can't wait to stop dating my screen.";
+
+        function cutCake() {
+            if (date === 6) {
+                document.getElementById('cake-container').classList.add('cut');
+                confetti({
+                    particleCount: 150,
+                    spread: 70,
+                    origin: { y: 0.6 },
+                    colors: ['#ff85a1', '#ffffff', '#ffd700']
+                });
+            } else {
+                alert("Patience! No cake until the 6th. 🍰");
+            }
+        }
+
+        if (date !== 6) {
+            statusText.innerText = "Check back on the 6th for our cake!";
+        } else {
+            statusText.innerText = "Tap the cake to cut it!";
+        }
+    </script>
+</body>
+</html>
