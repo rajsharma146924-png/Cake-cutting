@@ -17,7 +17,6 @@
             height: 100vh;
             font-family: 'Arial', sans-serif;
             overflow: hidden;
-            text-align: center;
         }
 
         h1 { color: #c9184a; margin-bottom: 5px; font-size: 2rem; }
@@ -33,13 +32,24 @@
             align-items: center;
         }
 
+        /* The Plate Shadow */
+        .plate {
+            position: absolute;
+            width: 260px;
+            height: 260px;
+            background: rgba(0,0,0,0.05);
+            border-radius: 50%;
+            top: 55%;
+            z-index: 1;
+        }
+
         #cake-slice {
             transition: transform 0.7s cubic-bezier(0.175, 0.885, 0.32, 1.275);
             transform-origin: 75px 75px;
         }
 
         .is-cut #cake-slice {
-            transform: translate(25px, -20px) rotate(12deg);
+            transform: translate(30px, -25px) rotate(15deg);
         }
 
         .candle-box {
@@ -53,7 +63,7 @@
         .candle-stick {
             width: 10px;
             height: 45px;
-            background: #ffd6a5;
+            background: linear-gradient(#ffd6a5, #ffadad);
             border-radius: 3px;
         }
 
@@ -75,8 +85,11 @@
         .gold-text {
             font-family: 'Dancing Script', cursive;
             fill: url(#goldGradient);
-            filter: drop-shadow(1px 1px 2px rgba(0,0,0,0.3));
+            filter: drop-shadow(1px 1px 2px rgba(0,0,0,0.4));
         }
+
+        /* 3D Depth filter */
+        .cake-depth { filter: drop-shadow(0px 8px 0px #e66a85); }
     </style>
 </head>
 <body>
@@ -85,34 +98,41 @@
     <p id="msg">Tap to light the candle 🕯️</p>
 
     <div class="cake-wrapper" onclick="celebrate()">
+        <div class="plate"></div>
         <div class="candle-box" id="candle">
             <div class="flame" id="flame"></div>
             <div class="candle-stick"></div>
         </div>
 
-        <svg viewBox="0 0 150 150" width="380" height="380">
+        <svg viewBox="0 0 150 150" width="380" height="380" class="cake-depth">
             <defs>
                 <linearGradient id="goldGradient" x1="0%" y1="0%" x2="100%" y2="100%">
-                    <stop offset="0%" style="stop-color:#d4af37;stop-opacity:1" />
-                    <stop offset="50%" style="stop-color:#f9e272;stop-opacity:1" />
-                    <stop offset="100%" style="stop-color:#b8860b;stop-opacity:1" />
+                    <stop offset="0%" style="stop-color:#d4af37;" />
+                    <stop offset="50%" style="stop-color:#f9e272;" />
+                    <stop offset="100%" style="stop-color:#b8860b;" />
                 </linearGradient>
+                
+                <!-- Sprinkles pattern -->
+                <pattern id="sprinkles" x="0" y="0" width="10" height="10" patternUnits="userSpaceOnUse">
+                    <circle cx="2" cy="2" r="0.5" fill="#FFD700" />
+                    <circle cx="7" cy="5" r="0.5" fill="#FFFFFF" />
+                    <circle cx="4" cy="8" r="0.5" fill="#FF69B4" />
+                </pattern>
             </defs>
 
-            <!-- Main Cake Body with frosting border -->
-            <path d="M 75,75 L 110,55 A 40,40 0 1 1 75,35 Z" 
-                  fill="#ff85a1" 
-                  stroke="white" 
-                  stroke-width="2.5" 
-                  stroke-dasharray="2,1" />
+            <!-- Main Cake Body -->
+            <path d="M 75,75 L 110,55 A 40,40 0 1 1 75,35 Z" fill="#ff85a1" />
+            <!-- Sprinkles Layer -->
+            <path d="M 75,75 L 110,55 A 40,40 0 1 1 75,35 Z" fill="url(#sprinkles)" opacity="0.6" />
+            <!-- Outer Frosting (No inner lines) -->
+            <path d="M 110,55 A 40,40 0 1 1 75,35" fill="none" stroke="white" stroke-width="3" stroke-linecap="round" />
             
-            <!-- The Slice with frosting border -->
+            <!-- The Slice -->
             <g id="cake-slice">
-                <path d="M 75,75 L 75,35 A 40,40 0 0 1 110,55 Z" 
-                      fill="#ff85a1" 
-                      stroke="white" 
-                      stroke-width="2.5" 
-                      stroke-dasharray="2,1" />
+                <path d="M 75,75 L 75,35 A 40,40 0 0 1 110,55 Z" fill="#ff85a1" />
+                <path d="M 75,75 L 75,35 A 40,40 0 0 1 110,55 Z" fill="url(#sprinkles)" opacity="0.6" />
+                <!-- Outer Frosting for Slice only -->
+                <path d="M 75,35 A 40,40 0 0 1 110,55" fill="none" stroke="white" stroke-width="3" stroke-linecap="round" />
             </g>
 
             <text x="75" y="80" class="gold-text" font-size="11" text-anchor="middle" pointer-events="none">Happy</text>
@@ -143,7 +163,7 @@
                     particleCount: 150,
                     spread: 70,
                     origin: { y: 0.6 },
-                    colors: ['#ff85a1', '#ffffff', '#ffd700']
+                    colors: ['#d4af37', '#ffffff', '#ff85a1']
                 });
                 state = 2;
             }
