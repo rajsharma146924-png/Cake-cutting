@@ -3,244 +3,175 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Our Special Monthly 6th - Perfected</title>
-    <!-- Stable Google Font -->
-    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;600&display=swap" rel="stylesheet">
+    <title>Happy 6 Months!</title>
     <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
     <style>
-        :root {
-            --cake-color: #ff4d6d;
-            --frosting-color: #ff85a1;
-            --text-color: #ffffff;
-            --plate-color: #e9ecef;
-            --page-bg: #fff0f3;
-        }
-
         body {
-            background-color: var(--page-bg);
+            background-color: #fff0f3;
+            margin: 0;
             display: flex;
             flex-direction: column;
             align-items: center;
             justify-content: center;
             height: 100vh;
-            margin: 0;
-            font-family: 'Poppins', sans-serif;
+            font-family: 'Arial', sans-serif;
             overflow: hidden;
+            text-align: center;
         }
 
-        h1 {
-            color: #c9184a;
-            font-weight: 300;
-            margin-bottom: 20px;
-            font-size: 1.8rem;
+        #ui-layer {
+            position: absolute;
+            top: 10%;
+            z-index: 10;
         }
 
-        .scene {
+        h1 { color: #c9184a; margin: 0; font-size: 2rem; }
+        p { color: #ff4d6d; font-weight: bold; margin-top: 10px; }
+
+        #cake-container {
             position: relative;
-            width: 320px;
-            height: 320px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
+            width: 350px;
+            height: 350px;
             cursor: pointer;
-        }
-
-        /* Standard SVG Heart, perfectly centered */
-        .heart-svg {
-            position: absolute;
-            width: 250px;
-            height: 250px;
-            fill: var(--cake-color);
-            transition: all 0.8s ease;
-            box-shadow: 0px 10px 30px rgba(0,0,0,0.1);
-        }
-
-        /* SVG Text, perfectly aligned */
-        .cake-text-svg {
-            font-family: 'Poppins', sans-serif;
-            font-size: 1.6rem;
-            font-weight: bold;
-            fill: var(--text-color);
-            text-shadow: 1px 1px 2px rgba(0,0,0,0.2);
-        }
-
-        /* Optimized Candle (fixed alignment) */
-        .candle-container {
-            position: absolute;
-            top: -20px; /* Aligned relative to the scene center */
-            left: calc(50% - 6px); /* Center relative to scene */
-            width: 12px;
-            height: 45px;
-            z-index: 15;
             display: flex;
-            flex-direction: column;
+            justify-content: center;
             align-items: center;
         }
 
-        .candle-stick {
+        /* The Heart */
+        .heart {
+            position: relative;
+            width: 200px;
+            height: 200px;
+            background-color: #ff4d6d;
+            transform: rotate(-45deg);
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+            transition: transform 0.5s ease;
+        }
+
+        .heart::before, .heart::after {
+            content: "";
+            position: absolute;
+            width: 200px;
+            height: 200px;
+            background-color: #ff4d6d;
+            border-radius: 50%;
+        }
+
+        .heart::before { top: -100px; left: 0; }
+        .heart::after { left: 100px; top: 0; }
+
+        /* The Text on Cake */
+        .cake-label {
+            position: absolute;
+            z-index: 5;
+            color: white;
+            font-size: 1.5rem;
+            font-weight: bold;
+            pointer-events: none;
             width: 100%;
-            height: 100%;
-            background: linear-gradient(to bottom, #ffd6a5, #ffadad);
-            border-radius: 3px;
+            text-align: center;
+        }
+
+        /* The Candle */
+        .candle {
+            position: absolute;
+            bottom: 60%;
+            width: 12px;
+            height: 50px;
+            background: #ffd6a5;
+            border-radius: 4px;
+            z-index: 6;
         }
 
         .flame {
             position: absolute;
-            top: -15px; /* Fire above candle */
+            top: -20px;
+            left: -2px;
             width: 16px;
-            height: 22px;
-            background: #ff9e00;
+            height: 24px;
+            background: #ffa500;
             border-radius: 50% 50% 20% 20%;
-            box-shadow: 0 0 20px #ff9e00;
-            display: none; /* Initially unlit */
+            box-shadow: 0 0 15px #ffa500;
             animation: flicker 0.1s infinite alternate;
-        }
-
-        @keyframes flicker {
-            from { transform: scale(1); }
-            to { transform: scale(1.1); }
-        }
-
-        /* The SVG slice overlay (looks like a cut piece) */
-        .slice-svg {
-            position: absolute;
-            fill: var(--page-bg); /* Use page background color to look cut out */
-            width: 100px;
-            height: 100px;
-            transition: all 0.8s ease;
-            clip-path: polygon(100% 0, 0 0, 100% 100%);
-            z-index: 11; /* Above cake text */
             display: none;
         }
 
-        /* Active cut animation states */
-        .cut-active .heart-svg {
-            transform: translate(-10px, 10px); /* Move cake slightly to the side */
+        @keyframes flicker {
+            from { transform: scale(1); } to { transform: scale(1.1); }
         }
 
-        .cut-active .slice-svg {
-            display: block;
-            transform: translate(30px, -30px); /* Move slice out */
+        /* Slice Animation */
+        .cut-active .heart {
+            clip-path: polygon(0% 0%, 100% 0%, 100% 45%, 50% 50%, 100% 55%, 100% 100%, 0% 100%);
         }
 
-        /* The slice line that appears briefly to show the cut action */
-        .cut-line {
+        #footer-text {
             position: absolute;
-            width: 3px;
-            height: 120px;
-            background: rgba(255, 255, 255, 0.7);
-            z-index: 13;
-            transform: scaleY(0);
-            transition: transform 0.4s ease;
-        }
-
-        .cut-active .cut-line {
-            transform: scaleY(1);
-        }
-
-        .instruction {
-            margin-top: 40px;
-            color: #ff4d6d;
-            font-weight: 500;
-            font-size: 1.1rem;
-        }
-
-        .plate {
-            position: absolute;
-            bottom: 30px;
-            width: 320px;
-            height: 12px;
-            background: var(--plate-color);
-            border-radius: 50%;
-            z-index: -1;
+            bottom: 15%;
+            color: #c9184a;
+            font-size: 1.2rem;
         }
     </style>
 </head>
 <body>
 
-    <h1 id="mainTitle">Our Special Day</h1>
-
-    <div class="scene" onclick="handleStep()">
-        
-        <!-- Plate -->
-        <div class="plate"></div>
-
-        <!-- Stable SVG Heart Cake -->
-        <svg class="heart-svg" viewBox="0 0 100 100" id="cake">
-            <path d="M50 88 C48.5 86.5 2 48.5 2 30 A20 20 0 0 1 30 10 C37 10 44 14 50 20 C56 14 63 10 70 10 A20 20 0 0 1 98 30 C98 48.5 51.5 86.5 50 88 Z" />
-            <!-- Text integrated directly into SVG for perfect scaling/alignment -->
-            <text x="50" y="40" class="cake-text-svg" text-anchor="middle">Happy</text>
-            <text x="50" y="60" class="cake-text-svg" text-anchor="middle">6 Months</text>
-        </svg>
-
-        <!-- SVG Slice (appears and slides out) -->
-        <svg class="slice-svg" viewBox="0 0 100 100" id="slice">
-            <path d="M50 88 C48.5 86.5 2 48.5 2 30 A20 20 0 0 1 30 10 C37 10 44 14 50 20 C56 14 63 10 70 10 A20 20 0 0 1 98 30 C98 48.5 51.5 86.5 50 88 Z" />
-        </svg>
-
-        <!-- Brief Cut Line -->
-        <div class="cut-line"></div>
-
-        <!-- Properly Aligned Candle -->
-        <div class="candle-container" id="candle">
-            <div class="candle-stick"></div>
-            <div class="flame" id="flame"></div>
-        </div>
-
+    <div id="ui-layer">
+        <h1 id="title">Our Special Day</h1>
+        <p id="instruction">Tap to light the candle 🕯️</p>
     </div>
 
-    <p class="instruction" id="status">Tap to light the candle 🕯️</p>
+    <div id="cake-container" onclick="nextStep()">
+        <div class="candle" id="candle-obj">
+            <div class="flame" id="flame-obj"></div>
+        </div>
+        <div class="cake-label">Happy<br>6 Months</div>
+        <div class="heart" id="heart-obj"></div>
+    </div>
+
+    <div id="footer-text"></div>
 
     <script>
-        let step = 0;
+        let state = 0;
 
-        function handleStep() {
-            const flame = document.getElementById('flame');
-            const status = document.getElementById('status');
-            const scene = document.querySelector('.scene');
-            const title = document.getElementById('mainTitle');
-            const candle = document.getElementById('candle');
+        function nextStep() {
+            const flame = document.getElementById('flame-obj');
+            const instruction = document.getElementById('instruction');
+            const container = document.getElementById('cake-container');
+            const footer = document.getElementById('footer-text');
+            const title = document.getElementById('title');
+            const candle = document.getElementById('candle-obj');
 
-            if (step === 0) {
-                // Step 1: Light Candle (appears where unlit candle was)
+            if (state === 0) {
                 flame.style.display = 'block';
-                status.innerText = "Make a wish and tap to cut! 🎂";
-                step = 1;
-            } else if (step === 1) {
-                // Step 2: Cut Cake (slice separates, candle disappears)
-                scene.classList.add('cut-active');
-                
-                // Set immediate cut animation (candle out, line shows)
+                instruction.innerText = "Now, make a wish and tap to cut! 🎂";
+                state = 1;
+            } else if (state === 1) {
+                container.classList.add('cut-active');
                 candle.style.display = 'none';
+                instruction.style.display = 'none';
+                title.innerText = "Happy 6 Months, Shreya! ❤️";
+                footer.innerText = "Another month down, forever to go!";
+                
+                // Confetti Burst
+                const count = 200;
+                const defaults = { origin: { y: 0.7 } };
 
-                status.innerText = "Another month down, forever to go! ❤️";
-                title.innerText = "Happy Anniversary!";
-
-                // Heart-themed Confetti (using optimized colors)
-                const end = Date.now() + 2500;
-                const colors = ['#ff4d6d', '#ff758f', '#ffffff'];
-
-                (function frame() {
+                function fire(particleRatio, opts) {
                     confetti({
-                        particleCount: 2,
-                        angle: 60,
-                        spread: 55,
-                        origin: { x: 0 },
-                        colors: colors
+                        ...defaults,
+                        ...opts,
+                        particleCount: Math.floor(count * particleRatio)
                     });
-                    confetti({
-                        particleCount: 2,
-                        angle: 120,
-                        spread: 55,
-                        origin: { x: 1 },
-                        colors: colors
-                    });
+                }
 
-                    if (Date.now() < end) {
-                        requestAnimationFrame(frame);
-                    }
-                }());
-                step = 2;
+                fire(0.25, { spread: 26, startVelocity: 55 });
+                fire(0.2, { spread: 60 });
+                fire(0.35, { spread: 100, decay: 0.91, scalar: 0.8 });
+                fire(0.1, { spread: 120, startVelocity: 25, decay: 0.92, scalar: 1.2 });
+                fire(0.1, { spread: 120, startVelocity: 45 });
+
+                state = 2;
             }
         }
     </script>
