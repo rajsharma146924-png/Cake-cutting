@@ -6,161 +6,170 @@
     <title>Happy 6 Months!</title>
     <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
     <style>
+        :root {
+            --cake-pink: #ff85a1;
+            --frosting-white: #ffffff;
+            --bg-pink: #fff0f3;
+        }
+
         body {
-            background-color: #fff0f3;
+            background-color: var(--bg-pink);
             margin: 0;
             display: flex;
             flex-direction: column;
             align-items: center;
             justify-content: center;
             height: 100vh;
-            font-family: 'Segoe UI', Roboto, sans-serif;
-            text-align: center;
+            font-family: 'Arial', sans-serif;
+            overflow: hidden;
         }
 
-        .container {
-            position: relative;
-            width: 320px;
-            height: 400px;
-            cursor: pointer;
-            user-select: none;
-        }
+        h1 { color: #c9184a; margin-bottom: 5px; }
+        #instruction { color: #ff4d6d; font-weight: bold; margin-bottom: 20px; height: 20px; }
 
-        h1 { color: #c9184a; font-weight: 600; margin-bottom: 10px; }
-        #msg { color: #ff4d6d; font-size: 1.1rem; height: 30px; }
-
-        /* The Heart Container */
-        .cake-wrapper {
+        .cake-container {
             position: relative;
             width: 300px;
             height: 300px;
-            margin: 0 auto;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            cursor: pointer;
         }
 
-        /* Using a reliable Unicode/CSS heart combo that won't distort */
-        .heart-base {
-            font-size: 250px;
-            color: #ff4d6d;
-            line-height: 300px;
-            filter: drop-shadow(0 10px 20px rgba(0,0,0,0.1));
-            position: absolute;
-            width: 100%;
-            left: 0;
-            top: 0;
+        /* The Pink Heart */
+        .heart {
+            position: relative;
+            width: 180px;
+            height: 180px;
+            background-color: var(--cake-pink);
+            transform: rotate(-45deg);
+            box-shadow: 0 10px 20px rgba(0,0,0,0.1);
+            /* Frosting Border */
+            border: 6px dotted var(--frosting-white);
+            transition: transform 0.6s ease;
         }
 
-        .cake-text {
+        .heart::before, .heart::after {
+            content: "";
             position: absolute;
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -40%);
+            width: 180px;
+            height: 180px;
+            background-color: var(--cake-pink);
+            border-radius: 50%;
+            border: 6px dotted var(--frosting-white);
+            box-sizing: border-box;
+        }
+
+        .heart::before { top: -95px; left: -6px; }
+        .heart::after { left: 89px; top: -6px; }
+
+        /* Label on Top */
+        .label {
+            position: absolute;
+            z-index: 10;
             color: white;
-            font-size: 1.6rem;
             font-weight: bold;
-            width: 80%;
-            line-height: 1.2;
-            z-index: 5;
-            text-shadow: 0 2px 4px rgba(0,0,0,0.2);
+            font-size: 1.4rem;
+            text-align: center;
+            pointer-events: none;
+            text-shadow: 1px 1px 3px rgba(0,0,0,0.2);
         }
 
-        /* Candle */
+        /* The Candle */
         .candle {
             position: absolute;
             top: 20px;
-            left: 50%;
-            transform: translateX(-50%);
             width: 12px;
             height: 45px;
-            background: linear-gradient(#ffd6a5, #ffadad);
+            background: #ffd6a5;
             border-radius: 4px;
-            z-index: 10;
+            z-index: 15;
         }
 
         .flame {
             position: absolute;
-            top: -20px;
-            left: -2px;
-            width: 16px;
-            height: 24px;
+            top: -18px;
+            left: -1px;
+            width: 14px;
+            height: 20px;
             background: #ffa500;
             border-radius: 50% 50% 20% 20%;
             box-shadow: 0 0 15px #ffa500;
-            animation: flicker 0.1s infinite alternate;
             display: none;
+            animation: flicker 0.1s infinite alternate;
         }
 
         @keyframes flicker { from { transform: scale(1); } to { transform: scale(1.1); } }
 
-        /* The "Slice" - a simple white overlay that appears to cut the heart */
-        .slice-cut {
+        /* The Cut Slice Animation */
+        .slice-overlay {
             position: absolute;
-            top: 50%;
-            left: 50%;
-            width: 0;
-            height: 0;
-            background: #fff0f3; /* Matches background */
-            z-index: 4;
-            transition: all 0.6s ease-in-out;
-            clip-path: polygon(50% 50%, 100% 0, 100% 100%);
+            width: 100px;
+            height: 100px;
+            background: var(--bg-pink);
+            right: 15px;
+            top: 60px;
+            clip-path: polygon(100% 0, 0 50%, 100% 100%);
+            display: none;
+            z-index: 11;
         }
 
-        .is-cut .slice-cut {
-            width: 150px;
-            height: 150px;
-            transform: translate(0, -75px);
+        .active-cut .slice-overlay {
+            display: block;
+            animation: sliceOut 0.8s forwards;
         }
 
+        @keyframes sliceOut {
+            from { transform: translate(0, 0); }
+            to { transform: translate(30px, -20px); background-color: var(--cake-pink); border: 3px dotted white;}
+        }
     </style>
 </head>
 <body>
 
-    <h1 id="title">Our Special Day</h1>
-    <p id="msg">Tap to light the candle 🕯️</p>
+    <h1 id="title">Happy Anniversary!</h1>
+    <p id="instruction">Tap to light the candle 🕯️</p>
 
-    <div class="container" onclick="next()">
+    <div class="cake-container" onclick="handleStep()">
         <div class="candle" id="candle">
             <div class="flame" id="flame"></div>
         </div>
         
-        <div class="cake-wrapper" id="cake">
-            <div class="heart-base">❤</div>
-            <div class="cake-text">Happy<br>6 Months</div>
-            <div class="slice-cut"></div>
-        </div>
+        <div class="label">Happy<br>6 Months</div>
+        <div class="heart" id="mainHeart"></div>
+        <div class="slice-overlay" id="slice"></div>
     </div>
 
     <script>
         let step = 0;
 
-        function next() {
+        function handleStep() {
             const flame = document.getElementById('flame');
             const candle = document.getElementById('candle');
-            const cake = document.getElementById('cake');
-            const msg = document.getElementById('msg');
+            const container = document.querySelector('.cake-container');
+            const instr = document.getElementById('instruction');
             const title = document.getElementById('title');
 
-            if (state === 0) {
-                // Light
+            if (step === 0) {
                 flame.style.display = 'block';
-                msg.innerText = "Make a wish and tap to cut! 🎂";
-                state = 1;
-            } else if (state === 1) {
-                // Cut
-                cake.classList.add('is-cut');
+                instr.innerText = "Make a wish and tap to cut! 🎂";
+                step = 1;
+            } else if (step === 1) {
+                container.classList.add('active-cut');
                 candle.style.display = 'none';
                 title.innerText = "Happy 6 Months, Shreya! ❤️";
-                msg.innerText = "Another month down, forever to go!";
+                instr.innerText = "Another month down, forever to go!";
                 
                 confetti({
                     particleCount: 150,
                     spread: 70,
                     origin: { y: 0.6 },
-                    colors: ['#ff4d6d', '#ffffff', '#ff85a1']
+                    colors: ['#ff85a1', '#ffffff', '#c9184a']
                 });
-                state = 2;
+                step = 2;
             }
         }
-        var state = 0; // init state
     </script>
 </body>
 </html>
