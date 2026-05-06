@@ -45,7 +45,7 @@
 
         #cake-slice {
             opacity: 0;
-            transition: transform 0.8s cubic-bezier(0.175, 0.885, 0.32, 1.275), opacity 0.2s;
+            transition: transform 0.8s cubic-bezier(0.175, 0.885, 0.32, 1.275), opacity 0.1s;
             transform-origin: 75px 75px;
         }
 
@@ -112,15 +112,18 @@
                 </linearGradient>
             </defs>
 
-            <!-- Main Cake (The part that stays) -->
+            <!-- 1. Main Cake Body (with gap) -->
             <path d="M 75,75 L 110,55 A 40,40 0 1 1 75,35 Z" fill="#ff85a1" />
-            <!-- Outer Frosting for Main Body -->
             <path d="M 110,55 A 40,40 0 1 1 75,35" fill="none" stroke="white" stroke-width="2.5" stroke-linecap="round" />
+
+            <!-- 2. The "Plug" (Fills the gap initially, no stroke to avoid lines) -->
+            <path id="cake-filler" d="M 75,75 L 75,35 A 40,40 0 0 1 110,55 Z" fill="#ff85a1" />
+            <!-- Initial full-circle white border -->
+            <path id="initial-border" d="M 75,35 A 40,40 0 0 1 110,55" fill="none" stroke="white" stroke-width="2.5" stroke-linecap="round" />
             
-            <!-- The Slice (Starts hidden and perfectly aligned in the gap) -->
+            <!-- 3. The Slice (Hidden until cut) -->
             <g id="cake-slice">
                 <path d="M 75,75 L 75,35 A 40,40 0 0 1 110,55 Z" fill="#ff85a1" />
-                <!-- Outer Frosting for Slice only -->
                 <path d="M 75,35 A 40,40 0 0 1 110,55" fill="none" stroke="white" stroke-width="2.5" stroke-linecap="round" />
             </g>
 
@@ -137,12 +140,19 @@
             const msg = document.getElementById('msg');
             const title = document.getElementById('title');
             const candle = document.getElementById('candle');
+            const filler = document.getElementById('cake-filler');
+            const initialBorder = document.getElementById('initial-border');
 
             if (state === 0) {
                 flame.style.display = 'block';
                 msg.innerText = "Make a wish and cut the cake! 🎂";
                 state = 1;
             } else if (state === 1) {
+                // Remove the plug and the temporary border
+                filler.style.display = 'none';
+                initialBorder.style.display = 'none';
+                
+                // Animate the actual slice
                 wrapper.classList.add('is-cut');
                 candle.style.opacity = '0';
                 title.innerText = "Happy 6 Months, Shreya! ❤️";
