@@ -25,7 +25,6 @@
 
         .cake-wrapper {
             position: relative;
-            /* Increased container size to prevent cropping */
             width: 400px; 
             height: 400px;
             cursor: pointer;
@@ -36,17 +35,16 @@
 
         #cake-slice {
             transition: transform 0.7s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-            transform-origin: 75px 75px; /* Adjusted for new viewBox */
+            transform-origin: 75px 75px;
         }
 
         .is-cut #cake-slice {
-            /* Moves the slice further out into the new empty space */
             transform: translate(25px, -20px) rotate(12deg);
         }
 
         .candle-box {
             position: absolute;
-            top: 45px;
+            top: 75px; 
             left: 50%;
             transform: translateX(-50%);
             z-index: 10;
@@ -92,7 +90,6 @@
             <div class="candle-stick"></div>
         </div>
 
-        <!-- Expanded viewBox to 150 to give the slice "room to breathe" -->
         <svg viewBox="0 0 150 150" width="380" height="380">
             <defs>
                 <linearGradient id="goldGradient" x1="0%" y1="0%" x2="100%" y2="100%">
@@ -102,17 +99,24 @@
                 </linearGradient>
             </defs>
 
-            <!-- Main Cake Body - Centered at 75,75 -->
-            <path d="M 75,75 L 110,55 A 40,40 0 1 1 75,35 Z" fill="#ff85a1" />
+            <!-- Main Cake Body with frosting border -->
+            <path d="M 75,75 L 110,55 A 40,40 0 1 1 75,35 Z" 
+                  fill="#ff85a1" 
+                  stroke="white" 
+                  stroke-width="2.5" 
+                  stroke-dasharray="2,1" />
             
-            <!-- The Slice - Centered at 75,75 -->
+            <!-- The Slice with frosting border -->
             <g id="cake-slice">
-                <path d="M 75,75 L 75,35 A 40,40 0 0 1 110,55 Z" fill="#ff85a1" />
+                <path d="M 75,75 L 75,35 A 40,40 0 0 1 110,55 Z" 
+                      fill="#ff85a1" 
+                      stroke="white" 
+                      stroke-width="2.5" 
+                      stroke-dasharray="2,1" />
             </g>
 
-            <!-- Text perfectly centered on the cake's axis -->
-            <text x="75" y="82" class="gold-text" font-size="11" text-anchor="middle" pointer-events="none">Happy</text>
-            <text x="75" y="94" class="gold-text" font-size="11" text-anchor="middle" pointer-events="none">6 Months</text>
+            <text x="75" y="80" class="gold-text" font-size="11" text-anchor="middle" pointer-events="none">Happy</text>
+            <text x="75" y="92" class="gold-text" font-size="11" text-anchor="middle" pointer-events="none">6 Months</text>
         </svg>
     </div>
 
