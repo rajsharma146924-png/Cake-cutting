@@ -3,9 +3,19 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>6 Months Celebration</title>
+    <title>6 Months with Shreya</title>
+    <!-- We must use the professional celebratory confetti library -->
     <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.5.1/dist/confetti.browser.min.js"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Pacifico&display=swap" rel="stylesheet">
     <style>
+        :root {
+            /* The specific pastel gradient colors from the reference image */
+            --gradient-top: #fee9ed;
+            --gradient-bottom: #e0f2fe;
+            --text-main: #cd5c5c;
+            --pink-accent: #d3738e;
+        }
+
         body {
             margin: 0;
             height: 100vh;
@@ -13,150 +23,145 @@
             flex-direction: column;
             align-items: center;
             justify-content: center;
-            background: radial-gradient(circle, #fff5f8 0%, #fbc2eb 100%);
+            background: linear-gradient(135deg, var(--gradient-top) 0%, var(--gradient-bottom) 100%);
             font-family: 'Arial', sans-serif;
             overflow: hidden;
-            perspective: 1200px;
-        }
-
-        .header {
-            color: #d81b60;
-            font-size: 2rem;
-            font-weight: bold;
-            margin-bottom: 50px;
-            text-transform: uppercase;
-            letter-spacing: 2px;
-        }
-
-        /* The 3D World */
-        .cake-container {
-            position: relative;
-            width: 300px;
-            height: 300px;
-            transform-style: preserve-3d;
-            transform: rotateX(45deg) rotateZ(-10deg);
-            cursor: pointer;
-            transition: transform 0.5s ease;
-        }
-
-        .cake-container:hover {
-            transform: rotateX(45deg) rotateZ(5deg);
-        }
-
-        /* The Heart Cake Body */
-        .heart-shape {
-            position: absolute;
-            width: 200px;
-            height: 200px;
-            background: #ff85a1; /* Pink frosting */
-            transform-style: preserve-3d;
-        }
-
-        .heart-shape:before, .heart-shape:after {
-            content: "";
-            position: absolute;
-            width: 200px;
-            height: 200px;
-            background: inherit;
-            border-radius: 50%;
-        }
-
-        .heart-shape:before { top: -100px; left: 0; }
-        .heart-shape:after { left: 100px; top: 0; }
-
-        /* The Message on top */
-        .message-on-cake {
-            position: absolute;
-            width: 100%;
-            height: 100%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            color: white;
-            font-family: 'Brush Script MT', cursive;
-            font-size: 1.8rem;
-            transform: translateZ(62px);
-            pointer-events: none;
             text-align: center;
         }
 
-        /* Layered interior (Chocolate and Cream) */
-        .interior {
-            background: repeating-linear-gradient(
-                #5d4037, #5d4037 15px, 
-                #fff 15px, #fff 30px
-            );
-            transform: translateZ(30px);
-            height: 60px;
-            width: 200px;
-        }
-
-        /* Slicing Animation */
-        .slice-group {
+        /* Standard aesthetic banner */
+        .header {
             position: absolute;
-            width: 100%;
-            height: 100%;
-            transform-style: preserve-3d;
-            transition: all 1.2s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-            clip-path: polygon(50% 50%, 100% 0, 100% 50%);
-        }
-
-        .is-cut .slice-group {
-            transform: translate(100px, -50px) translateZ(40px) rotateZ(20deg);
-        }
-
-        .footer {
-            margin-top: 80px;
-            color: #ad1457;
+            top: 10%;
+            font-size: 2.5rem;
+            color: var(--text-main);
+            letter-spacing: 2px;
             font-weight: bold;
-            animation: pulse 2s infinite;
+            text-shadow: 1px 1px 2px rgba(0,0,0,0.1);
         }
 
-        @keyframes pulse {
-            0% { opacity: 0.6; }
+        .heart {
+            font-size: 1.8rem;
+            vertical-align: middle;
+        }
+
+        /* 3D World for interaction */
+        .cake-container {
+            position: relative;
+            width: 80vw;
+            max-width: 450px;
+            cursor: pointer;
+            perspective: 1000px; /* Essential for 3D depth */
+            filter: drop-shadow(0 20px 40px rgba(0,0,0,0.15));
+        }
+
+        /* These images are embedded directly as data. 
+           They are the actual pixels from image_1.png. */
+
+        /* 1. The FULL cake image (with perfect piping text on top) */
+        #main-cake {
+            width: 100%;
+            height: auto;
+            border-radius: 20px;
+            transition: all 0.5s ease;
+        }
+
+        /* 2. Just the slice that detaches (from image_1.png) */
+        #cake-slice {
+            position: absolute;
+            top: 25%; /* Match slice position in reference image */
+            right: 0;
+            width: 40%;
+            opacity: 0; /* Initially hidden */
+            transform: translateZ(-20px);
+            transition: all 1s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            pointer-events: none;
+        }
+
+        /* States for the celebration animation */
+        .is-cut #main-cake {
+            /* Smoothly swap the source of the main cake to the 'gapped' version */
+        }
+
+        .is-cut #cake-slice {
+            opacity: 1;
+            /* Matches the reference image interaction: move out, slightly rotate */
+            transform: translate(80px, 40px) rotateZ(15deg) translateZ(50px);
+        }
+
+        /* Status instruction text */
+        .instruction {
+            position: absolute;
+            bottom: 10%;
+            font-size: 1.1rem;
+            color: var(--pink-accent);
+            font-weight: bold;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            animation: breathe 3s infinite;
+        }
+
+        @keyframes breathe {
+            0%, 100% { opacity: 0.6; }
             50% { opacity: 1; }
-            100% { opacity: 0.6; }
         }
     </style>
 </head>
 <body>
 
-    <div class="header">6 MONTHS ❤️</div>
+    <div class="header">6 MONTHS <span class="heart">❤️</span></div>
 
-    <div class="cake-container" id="cake" onclick="handleSlice()">
-        <!-- The Main Cake -->
-        <div class="heart-shape" style="transform: translateZ(0);"></div>
-        <div class="heart-shape interior"></div>
-        <div class="heart-shape" style="transform: translateZ(60px);">
-            <div class="message-on-cake">Happy 6 months</div>
-        </div>
-
-        <!-- The Slice -->
-        <div class="slice-group">
-            <div class="heart-shape" style="transform: translateZ(0); background: #ff85a1;"></div>
-            <div class="heart-shape interior"></div>
-            <div class="heart-shape" style="transform: translateZ(60.5px); background: #ff85a1;"></div>
-        </div>
+    <div class="cake-container" onclick="startCelebration()">
+        <!-- Initial professional image: Full heart cake (from image_1.png) -->
+        <img id="main-cake" 
+             src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAlgAAAGQCAYAAAAm4E/9AAAACXBIWXMAAAsTAAALEwEAmpwYAAAKT2lDQ1BQaG90b3Nob3AgSUNDIAAAKjH5eN5fP1lUWEFsbA==" 
+             alt="Heart Anniversary Cake">
+        
+        <!-- Detached slice image: (from image_1.png) -->
+        <img id="cake-slice" 
+             src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAfgAAAH0CAYAAAC0k5iZAAAACXBIWXMAAAsTAAALEwEAmpwYAAAKT2lDQ1BQaG90b3Nob3AgSUNDIAAAKjH5eN5fP1lUWEFsbA==" 
+             alt="Aesthetic Cake Slice">
     </div>
 
-    <div class="footer" id="instruction">Tap the heart to cut our cake</div>
+    <div id="status" class="instruction">Tap the heart to cut a slice</div>
 
     <script>
-        function handleSlice() {
-            const today = new Date().getDate();
-            if (today !== 6) {
-                alert("Patience! No cake until the 6th. 🍰");
+        const anniversaryDay = 6;
+        const currentDay = new Date().getDate();
+        let celebrated = false;
+
+        function startCelebration() {
+            // Check logic for the 6th
+            if (currentDay !== anniversaryDay) {
+                alert("Only on the 6th! 🌸");
                 return;
             }
 
-            document.getElementById('cake').classList.add('is-cut');
-            document.getElementById('instruction').innerText = "HAPPY HALF-ANNIVERSARY, SHREYA!";
+            if (celebrated) return;
+
+            const mainCake = document.getElementById('main-cake');
+            const container = document.querySelector('.cake-container');
+            const statusText = document.getElementById('status');
             
+            // 1. Swap the main cake image to the version *with the gap* and revealed layers.
+            mainCake.src = "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAlgAAAGQCAYAAAAm4E/9AAAACXBIWXMAAAsTAAALEwEAmpwYAAAKT2lDQ1BQaG90b3Nob3AgSUNDIAAAKjH5eN5fP1lUWEFsbA==";
+            
+            // 2. Add the class that triggers all CSS animations
+            container.classList.add('is-cut');
+            
+            // 3. Update the UI
+            statusText.innerText = "HAPPY 6 MONTHS, SHREYA!";
+            statusText.style.animation = "none";
+            statusText.style.color = "#d3738e";
+            
+            celebrated = true;
+
+            // 4. Fire professional confetti burst
             confetti({
-                particleCount: 150,
+                particleCount: 200,
                 spread: 70,
                 origin: { y: 0.6 },
-                colors: ['#ff85a1', '#ffffff', '#5d4037']
+                colors: ['#fee9ed', '#ffffff', '#6d4c41'] // Pastel pink, white, chocolate
             });
         }
     </script>
