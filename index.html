@@ -3,7 +3,14 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Happy 6 Months!</title>
+    <title>Our Special Day</title>
+    
+    <!-- Home Screen Icon and App Settings -->
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🎂</text></svg>">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="apple-mobile-web-app-title" content="6 Months">
+
     <link href="https://fonts.googleapis.com/css2?family=Dancing+Script:wght@700&display=swap" rel="stylesheet">
     <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
     <style>
@@ -19,23 +26,20 @@
             overflow: hidden;
             padding: 20px;
             box-sizing: border-box;
-        }
-
-        h1 { 
-            color: #c9184a; 
-            margin: 0 0 10px 0; 
-            font-size: clamp(1.5rem, 6vw, 2.2rem); 
-            text-align: center;
-        }
-        
-        p { 
-            color: #ff4d6d; 
-            font-weight: bold; 
-            margin-bottom: 20px; 
-            height: 24px;
             text-align: center;
         }
 
+        .hidden { display: none !important; }
+
+        h1 { color: #c9184a; margin: 0 0 10px 0; font-size: clamp(1.5rem, 6vw, 2.2rem); }
+        .sub-text { color: #ff4d6d; font-weight: bold; margin-bottom: 20px; height: 24px; }
+
+        /* Counter Styles */
+        #counter-container h2 { color: #ff4d6d; font-size: 1.2rem; margin-bottom: 20px; }
+        .timer { font-size: 1.1rem; color: #c9184a; line-height: 2; background: white; padding: 20px; border-radius: 15px; box-shadow: 0 4px 15px rgba(255, 77, 109, 0.2); }
+        .timer b { font-size: 1.4rem; }
+
+        /* Cake Styles */
         .cake-wrapper {
             position: relative;
             width: 100%;
@@ -48,14 +52,8 @@
         }
 
         .cake-shadow {
-            position: absolute;
-            width: 60%;
-            height: 10%;
-            background: rgba(0,0,0,0.06);
-            border-radius: 50%;
-            bottom: 15%;
-            filter: blur(10px);
-            z-index: 0;
+            position: absolute; width: 60%; height: 10%; background: rgba(0,0,0,0.06);
+            border-radius: 50%; bottom: 15%; filter: blur(10px); z-index: 0;
         }
 
         #cake-slice {
@@ -64,117 +62,113 @@
             transform-origin: 75px 75px;
         }
 
-        .is-cut #cake-slice {
-            opacity: 1;
-            transform: translate(25px, -20px) rotate(12deg);
-        }
+        .is-cut #cake-slice { opacity: 1; transform: translate(25px, -20px) rotate(12deg); }
 
-        .candle-box {
-            position: absolute;
-            top: 20%; 
-            left: 50%;
-            transform: translateX(-50%);
-            z-index: 10;
-        }
-
-        .candle-stick {
-            width: 8px;
-            height: 40px;
-            background: #ffd6a5;
-            border-radius: 3px;
-        }
-
+        .candle-box { position: absolute; top: 20%; left: 50%; transform: translateX(-50%); z-index: 10; transition: opacity 0.3s; }
+        .candle-stick { width: 8px; height: 40px; background: #ffd6a5; border-radius: 3px; }
         .flame {
-            position: absolute;
-            top: -18px;
-            left: -3px;
-            width: 14px;
-            height: 22px;
+            position: absolute; top: -18px; left: -3px; width: 14px; height: 22px;
             background: radial-gradient(circle at center, #fff, #ffa500, #ff4500);
-            border-radius: 50% 50% 20% 20%;
-            box-shadow: 0 0 15px #ffa500;
-            display: none;
-            animation: flicker 0.1s infinite alternate;
+            border-radius: 50% 50% 20% 20%; box-shadow: 0 0 15px #ffa500;
+            display: none; animation: flicker 0.1s infinite alternate;
         }
 
         @keyframes flicker { from { transform: scale(1); } to { transform: scale(1.1); } }
-
-        .gold-text {
-            font-family: 'Dancing Script', cursive;
-            fill: url(#goldGradient);
-            filter: drop-shadow(1px 1px 1px rgba(0,0,0,0.3));
-            dominant-baseline: middle;
-        }
+        .gold-text { font-family: 'Dancing Script', cursive; fill: url(#goldGradient); filter: drop-shadow(1px 1px 1px rgba(0,0,0,0.3)); dominant-baseline: middle; }
     </style>
 </head>
 <body>
 
-    <h1 id="title">Our Special Day</h1>
-    <p id="msg">Tap to light the candle 🕯️</p>
-
-    <div class="cake-wrapper" onclick="celebrate()">
-        <div class="cake-shadow"></div>
-        <div class="candle-box" id="candle">
-            <div class="flame" id="flame"></div>
-            <div class="candle-stick"></div>
-        </div>
-
-        <svg viewBox="0 0 150 150" width="100%" height="100%">
-            <defs>
-                <linearGradient id="goldGradient" x1="0%" y1="0%" x2="0%" y2="100%">
-                    <stop offset="0%" stop-color="#F5D061" />
-                    <stop offset="50%" stop-color="#E6AF2E" />
-                    <stop offset="100%" stop-color="#8B6914" />
-                </linearGradient>
-                
-                <g id="final-sprinkles">
-                    <!-- Left Section -->
-                    <circle cx="48" cy="70" r="0.9" fill="#FFFFFF"/>
-                    <circle cx="42" cy="88" r="0.9" fill="#FFD700"/>
-                    <circle cx="52" cy="102" r="0.9" fill="#c9184a"/>
-                    <!-- Bottom Section -->
-                    <circle cx="75" cy="108" r="0.9" fill="#FFFFFF"/>
-                    <circle cx="62" cy="110" r="0.9" fill="#FFD700"/>
-                    <circle cx="88" cy="105" r="0.9" fill="#c9184a"/>
-                    <!-- Right Section -->
-                    <circle cx="102" cy="92" r="0.9" fill="#FFFFFF"/>
-                    <circle cx="106" cy="78" r="0.9" fill="#FFD700"/>
-                    <circle cx="98" cy="70" r="0.9" fill="#c9184a"/>
-                    <!-- Center/Top Section -->
-                    <circle cx="65" cy="55" r="0.9" fill="#c9184a"/>
-                    <circle cx="55" cy="82" r="0.9" fill="#FFD700"/>
-                    <circle cx="75" cy="48" r="0.9" fill="#FFFFFF"/>
-                    <circle cx="85" cy="65" r="0.9" fill="#FFD700"/>
-                    <circle cx="68" cy="95" r="0.9" fill="#FFFFFF"/>
+    <!-- Anniversary View (Only visible on the 6th) -->
+    <div id="anniversary-view" class="hidden">
+        <h1 id="title">Our Special Day</h1>
+        <p id="msg" class="sub-text">Tap to light the candle 🕯️</p>
+        <div class="cake-wrapper" onclick="celebrate()">
+            <div class="cake-shadow"></div>
+            <div class="candle-box" id="candle">
+                <div class="flame" id="flame"></div>
+                <div class="candle-stick"></div>
+            </div>
+            <svg viewBox="0 0 150 150" width="100%" height="100%">
+                <defs>
+                    <linearGradient id="goldGradient" x1="0%" y1="0%" x2="0%" y2="100%">
+                        <stop offset="0%" stop-color="#F5D061" />
+                        <stop offset="50%" stop-color="#E6AF2E" />
+                        <stop offset="100%" stop-color="#8B6914" />
+                    </linearGradient>
+                    <g id="final-sprinkles">
+                        <circle cx="48" cy="70" r="0.9" fill="#FFFFFF"/><circle cx="42" cy="88" r="0.9" fill="#FFD700"/><circle cx="52" cy="102" r="0.9" fill="#c9184a"/>
+                        <circle cx="75" cy="108" r="0.9" fill="#FFFFFF"/><circle cx="62" cy="110" r="0.9" fill="#FFD700"/><circle cx="88" cy="105" r="0.9" fill="#c9184a"/>
+                        <circle cx="102" cy="92" r="0.9" fill="#FFFFFF"/><circle cx="106" cy="78" r="0.9" fill="#FFD700"/><circle cx="98" cy="70" r="0.9" fill="#c9184a"/>
+                        <circle cx="65" cy="55" r="0.9" fill="#c9184a"/><circle cx="55" cy="82" r="0.9" fill="#FFD700"/><circle cx="75" cy="48" r="0.9" fill="#FFFFFF"/>
+                    </g>
+                </defs>
+                <path d="M 75,75 L 110,55 A 40,40 0 1 1 75,35 Z" fill="#ff85a1" />
+                <use href="#final-sprinkles" />
+                <path d="M 110,55 A 40,40 0 1 1 75,35" fill="none" stroke="white" stroke-width="2" stroke-linecap="round" />
+                <path id="cake-filler" d="M 75,75 L 75,35 A 40,40 0 0 1 110,55 Z" fill="#ff85a1" />
+                <path id="initial-border" d="M 75,35 A 40,40 0 0 1 110,55" fill="none" stroke="white" stroke-width="2" stroke-linecap="round" />
+                <g id="cake-slice">
+                    <path d="M 75,75 L 75,35 A 40,40 0 0 1 110,55 Z" fill="#ff85a1" />
+                    <circle cx="85" cy="45" r="0.9" fill="#FFFFFF"/><circle cx="95" cy="52" r="0.9" fill="#FFD700"/><circle cx="88" cy="58" r="0.9" fill="#c9184a"/><circle cx="78" cy="55" r="0.9" fill="#FFFFFF"/>
+                    <path d="M 75,35 A 40,40 0 0 1 110,55" fill="none" stroke="white" stroke-width="2" stroke-linecap="round" />
                 </g>
-            </defs>
+                <text x="75" y="80" class="gold-text" font-size="12" text-anchor="middle" pointer-events="none">Happy</text>
+                <text x="75" y="94" class="gold-text" font-size="12" text-anchor="middle" pointer-events="none">6 Months</text>
+            </svg>
+        </div>
+    </div>
 
-            <!-- Main Cake Body -->
-            <path d="M 75,75 L 110,55 A 40,40 0 1 1 75,35 Z" fill="#ff85a1" />
-            <use href="#final-sprinkles" />
-            <path d="M 110,55 A 40,40 0 1 1 75,35" fill="none" stroke="white" stroke-width="2" stroke-linecap="round" />
-
-            <!-- The Plug (visible before cutting) -->
-            <path id="cake-filler" d="M 75,75 L 75,35 A 40,40 0 0 1 110,55 Z" fill="#ff85a1" />
-            <path id="initial-border" d="M 75,35 A 40,40 0 0 1 110,55" fill="none" stroke="white" stroke-width="2" stroke-linecap="round" />
-            
-            <!-- The Slice -->
-            <g id="cake-slice">
-                <path d="M 75,75 L 75,35 A 40,40 0 0 1 110,55 Z" fill="#ff85a1" />
-                <!-- Sprinkles safely tucked inside the slice -->
-                <circle cx="85" cy="45" r="0.9" fill="#FFFFFF"/>
-                <circle cx="95" cy="52" r="0.9" fill="#FFD700"/>
-                <circle cx="88" cy="58" r="0.9" fill="#c9184a"/>
-                <circle cx="78" cy="55" r="0.9" fill="#FFFFFF"/>
-                <path d="M 75,35 A 40,40 0 0 1 110,55" fill="none" stroke="white" stroke-width="2" stroke-linecap="round" />
-            </g>
-
-            <text x="75" y="80" class="gold-text" font-size="12" text-anchor="middle" pointer-events="none">Happy</text>
-            <text x="75" y="94" class="gold-text" font-size="12" text-anchor="middle" pointer-events="none">6 Months</text>
-        </svg>
+    <!-- Counter View (Visible all other days) -->
+    <div id="counter-view" class="hidden">
+        <h1>Waiting for the 6th...</h1>
+        <div id="counter-container">
+            <h2>Time since November 6, 2025:</h2>
+            <div class="timer" id="timer-display">
+                <!-- Live Timer Goes Here -->
+            </div>
+        </div>
     </div>
 
     <script>
+        const startDate = new Date('2025-11-06T00:00:00');
+        
+        function updateDisplay() {
+            const now = new Date();
+            const dayOfMonth = now.getDate();
+            
+            // Toggle between Cake and Counter based on date
+            if (dayOfMonth === 6) {
+                document.getElementById('anniversary-view').classList.remove('hidden');
+                document.getElementById('counter-view').classList.add('hidden');
+            } else {
+                document.getElementById('counter-view').classList.remove('hidden');
+                document.getElementById('anniversary-view').classList.add('hidden');
+                runCounter();
+            }
+        }
+
+        function runCounter() {
+            const display = document.getElementById('timer-display');
+            
+            setInterval(() => {
+                const now = new Date();
+                const diff = now - startDate;
+
+                const days = Math.floor(diff / (1000 * 60 * 60 * 24));
+                const hours = Math.floor((diff / (1000 * 60 * 60)) % 24);
+                const minutes = Math.floor((diff / (1000 * 60)) % 60);
+                const seconds = Math.floor((diff / 1000) % 60);
+
+                display.innerHTML = `
+                    <b>${days}</b> days<br>
+                    <b>${hours}</b> hours<br>
+                    <b>${minutes}</b> minutes<br>
+                    <b>${seconds}</b> seconds
+                `;
+            }, 1000);
+        }
+
         let state = 0;
         function celebrate() {
             const flame = document.getElementById('flame');
@@ -194,7 +188,7 @@
                 initialBorder.style.display = 'none';
                 wrapper.classList.add('is-cut');
                 candle.style.opacity = '0';
-                title.innerText = "Happy 6 Months, Baby! ❤️";
+                title.innerText = "Happy 6 Months, Shreya! ❤️";
                 msg.innerText = "";
                 
                 confetti({
@@ -206,6 +200,8 @@
                 state = 2;
             }
         }
+
+        updateDisplay();
     </script>
 </body>
 </html>
