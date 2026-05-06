@@ -127,23 +127,32 @@
                     <stop offset="100%" stop-color="#8B6914" />
                 </linearGradient>
                 
-                <g id="sprinkle-set">
-                    <circle cx="55" cy="50" r="0.8" fill="#FFFFFF" opacity="0.9"/>
-                    <circle cx="95" cy="85" r="0.8" fill="#FFD700" opacity="0.9"/>
-                    <circle cx="65" cy="105" r="0.8" fill="#FF69B4" opacity="0.9"/>
-                    <circle cx="45" cy="80" r="0.8" fill="#FFFFFF" opacity="0.9"/>
-                    <circle cx="70" cy="45" r="0.8" fill="#FFD700" opacity="0.9"/>
-                    <circle cx="85" cy="110" r="0.8" fill="#FFFFFF" opacity="0.9"/>
-                    <circle cx="50" cy="100" r="0.8" fill="#FFD700" opacity="0.9"/>
-                    <circle cx="40" cy="65" r="0.8" fill="#FF69B4" opacity="0.9"/>
-                    <circle cx="105" cy="75" r="0.8" fill="#FFFFFF" opacity="0.9"/>
-                    <circle cx="55" cy="115" r="0.8" fill="#FF69B4" opacity="0.9"/>
+                <g id="dense-sprinkles">
+                    <!-- White Sprinkles -->
+                    <circle cx="55" cy="55" r="0.8" fill="#FFFFFF"/>
+                    <circle cx="45" cy="75" r="1.1" fill="#FFFFFF"/>
+                    <circle cx="65" cy="100" r="0.7" fill="#FFFFFF"/>
+                    <circle cx="95" cy="95" r="1" fill="#FFFFFF"/>
+                    <circle cx="105" cy="80" r="0.9" fill="#FFFFFF"/>
+                    <circle cx="80" cy="110" r="0.8" fill="#FFFFFF"/>
+                    <circle cx="50" cy="95" r="1" fill="#FFFFFF"/>
+                    <!-- Gold Sprinkles -->
+                    <circle cx="70" cy="48" r="0.8" fill="#FFD700"/>
+                    <circle cx="58" cy="105" r="1.1" fill="#FFD700"/>
+                    <circle cx="42" cy="85" r="0.7" fill="#FFD700"/>
+                    <circle cx="100" cy="70" r="0.9" fill="#FFD700"/>
+                    <circle cx="85" cy="102" r="0.8" fill="#FFD700"/>
+                    <!-- Deep Pink Sprinkles -->
+                    <circle cx="50" cy="60" r="0.9" fill="#c9184a"/>
+                    <circle cx="108" cy="88" r="0.7" fill="#c9184a"/>
+                    <circle cx="65" cy="112" r="1.1" fill="#c9184a"/>
+                    <circle cx="40" cy="70" r="0.8" fill="#c9184a"/>
                 </g>
             </defs>
 
             <!-- Main Cake -->
             <path d="M 75,75 L 110,55 A 40,40 0 1 1 75,35 Z" fill="#ff85a1" />
-            <use href="#sprinkle-set" />
+            <use href="#dense-sprinkles" />
             <path d="M 110,55 A 40,40 0 1 1 75,35" fill="none" stroke="white" stroke-width="2" stroke-linecap="round" />
 
             <!-- The Plug -->
@@ -153,9 +162,12 @@
             <!-- The Slice -->
             <g id="cake-slice">
                 <path d="M 75,75 L 75,35 A 40,40 0 0 1 110,55 Z" fill="#ff85a1" />
-                <circle cx="90" cy="48" r="0.8" fill="#FFFFFF" opacity="0.9"/>
-                <circle cx="85" cy="55" r="0.8" fill="#FFD700" opacity="0.9"/>
-                <circle cx="95" cy="52" r="0.8" fill="#FF69B4" opacity="0.9"/>
+                <!-- Extra Slice Sprinkles -->
+                <circle cx="88" cy="45" r="0.9" fill="#FFFFFF"/>
+                <circle cx="95" cy="50" r="1.1" fill="#FFD700"/>
+                <circle cx="82" cy="52" r="0.8" fill="#c9184a"/>
+                <circle cx="92" cy="58" r="1" fill="#FFFFFF"/>
+                <circle cx="102" cy="54" r="0.7" fill="#FFD700"/>
                 <path d="M 75,35 A 40,40 0 0 1 110,55" fill="none" stroke="white" stroke-width="2" stroke-linecap="round" />
             </g>
 
